@@ -26,23 +26,23 @@ function deleteBookMark() {
 }
 
 function updateBookmark (id, newObj) {
-let updatedItem = this.bookMarksList.find(currentBookMark => currentBookMark.id === id);
-Object.assign(updatedItem, newObj);
+  let updatedItem = this.bookMarksList.find(currentBookMark => currentBookMark.id === id);
+  Object.assign(updatedItem, newObj);
 
 }
 
 function setError (error) {
-this.error = error;
+  this.error = error;
 
 }
 
 export default {
-findID, 
-addBookMark, 
-deleteBookMark, 
-updateBookmark, 
-setError
-
+  findID, 
+  addBookMark, 
+  deleteBookMark, 
+  updateBookmark, 
+  setError,
+  adding
 };
 
 

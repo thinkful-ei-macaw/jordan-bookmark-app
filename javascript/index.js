@@ -3,9 +3,9 @@ import bookmark from './bookmark.js';
 import store from './store.js';
 
 function main () {
-console.log('Is this working');
-bookmark.render();
-bookmark.returnToHomePage();
+  console.log('Is this working');
+  bookmark.render();
+  bookmark.setEventHandlers();
 }
 
 
@@ -16,5 +16,5 @@ bookmark.returnToHomePage();
 
 
 
-
+//First thing is executed 
 $(main);
