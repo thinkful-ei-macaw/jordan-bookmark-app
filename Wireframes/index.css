@@ -1,0 +1,138 @@
+body {
+    font-size: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 800;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 3rem;
+    text-align: center;
+}
+
+header {
+    margin-bottom: 2rem;
+    display: block;
+}
+
+.headline {
+    font-size: 30px;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.button-section {
+    display: flex;
+    margin: 0 auto 0.8rem;
+    padding: 1rem;
+}
+
+section {
+    text-align: center;
+}
+
+button.add-bookmark {
+    margin: 0px 16px;
+    font-size: 14px;
+}
+
+.bookmark-form {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+#filter-dropdown {
+    text-align: center;
+    margin-left: 1rem;
+    display: block;
+    border: 2px solid black;
+    font-family: Arial, Helvetica, sans-serif monospace;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+}
+
+.list-section {
+    margin: auto;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+}
+
+.bookmarks-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.bookmark {
+    display: flex;
+    justify-content: space-between;
+    min-width: 420px;
+    max-width: 100%;
+    text-align: center;
+    padding: 1rem;
+    margin: 0 auto 0.5rem;
+    background-color:grey;
+    border: 1px solid black;
+    border-radius: 5px;
+    position: relative;
+}
+
+.bookmark2 {
+    display: flex;
+    flex-direction: column;
+    min-width: 420px;
+    max-width: 100%;
+    text-align: center;
+    padding: 1rem;
+    margin: 0 auto 0.5rem;
+    background-color: grey;
+    border: 1px solid black;
+    border-radius: 5px;
+    position: relative;
+    height: 150px;
+}
+
+.bookmark-title {
+    font: 15px;
+}
+
+.expanded {
+height: 300px;
+}
+
+.title-rate-expanded {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    align-items: center;
+}
+
+.description-expanded {
+    outline: none;
+    background: var(--bookmark);
+    font-family: 'Roboto Mono',
+    monospace;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+    border: none;
+    max-height: 4rem;
+    resize: none;
+}
+
+.url-expanded {
+
+}
