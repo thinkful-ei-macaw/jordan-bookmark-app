@@ -6,7 +6,7 @@ function mainAPIFunction (...params) {
   let error;
   return fetch(...params)
     .then(res => {
-      if(!res.ok) error.code = res.status;
+      if(!res.ok) error = { code: res.status };
       if(!res.headers.get('content-type').includes('json')) {
         error.message = res.statusText;
         return Promise.reject(error);
@@ -29,7 +29,7 @@ function getBookmarkItems() {
 }
 
 // Fetching responsible for adding items
-function addBookMarkItems(newItem){
+function addBookMark(newItem) {
   return mainAPIFunction(BASE_URL, {
     method: 'POST', 
     headers: {'Content-Type':'application/json'},
@@ -57,7 +57,7 @@ function editBookMarkItems(id, data) {
 
 export default {
   getBookmarkItems,
-  addBookMarkItems,
+  addBookMark,
   deleteBookmarkItems,
   editBookMarkItems
 };

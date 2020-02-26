@@ -3,10 +3,16 @@ import bookmark from './bookmark.js';
 import store from './store.js';
 
 function main () {
-  console.log('Is this working');
-  bookmark.render();
   bookmark.setEventHandlers();
+  api.getBookmarkItems().then(resultJson => { 
+  for (let i = 0; i < resultJson.length; i++) {
+    store.addBookMark(resultJson[i]);
+  }
+    bookmark.render();
+  });
+    
 }
+
 
 
 

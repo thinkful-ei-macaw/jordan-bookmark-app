@@ -1,9 +1,10 @@
 import api from './api.js';
 import store from './store.js';
 
-function renderAddBookmark () {
-  console.log('testing');
- $('.bookmark-container').html(`
+// Template Generators 
+
+function renderAddBookmark() {
+  return `
     <header class="head-container">
         <h1 id="headline">My bookmarks</h1>
     </header>
@@ -19,57 +20,61 @@ function renderAddBookmark () {
         <button class="add-new-bookmark-button">Submit</button> 
     </form>
     <button class="return" type="button">Cancel</button>
-    `);
-}
-
-
-
-
-
-
-function deleteBookMark() {
-
-
-}
-
-function updateBookMark() {
-
-
-}
-
-function render() {
-  if(store.adding) {
- renderAddBookmark()
-  } else {
-    generateFirstPage();    
-  }
+    `;
 }
 
 function generateFirstPage() {
-  $('.bookmark-container').html(
-    `<header class="head-container">
+  return `
+    <header class="head-container">
              <h1 id="headline">My bookmarks</h1>
          </header>
          <section class="button-section">
              <button class="add-bookmark">Add new bookmark</button>
                  <select name="ratings" id="filter-dropdown">
                      <option class="filter-top" name="select0" value="0">Filter by rating</option>
-                     <option name="select1" value="5"> 5 or more</option>
+                     <option name="select1" value="5"> 5</option>
                      <option name="select2" value="4"> 4 or more</option>
                      <option name="select3" value="3"> 3 or more</option>
                      <option name="select4" value="2"> 2 or more</option>
                      <option name="select5" value="1"> 1 or more</option>
                  </select>
          </section>
-     </main>
-`);
+        <section>
+        ${generatingBookmarks()}
+        
+        </section> 
+`;
+}
+// Loop through array. 
+
+function generatingBookmarks() {
+  let html = '<ul>';
+  for (let i = 0; i < store.bookMarksList.length; i++) {
+    let bookmarkResult = store.bookMarksList[i];
+    if (bookmarkResult.rating >= store.filterValue) {
+      html += `
+  <li>${bookmarkResult.title} ${bookmarkResult.rating}</li>
+    `;
+    }
+  }
+  html += '</ul>';
+  return html;
 }
 
 
+function render() {
+  let html = '';
 
+  if (store.adding === false) {
+    html += generateFirstPage();
+  } else {
+    html += renderAddBookmark();
+  }
+  $('main').html(html);
+}
 
 // Event Handlers 
-	
+
 function serializeJson(form) {
   const formData = new FormData(form);
   const o = {};
@@ -77,13 +82,26 @@ function serializeJson(form) {
   return JSON.stringify(o);
 }
 
-function handleBookMarkSubmission () {
-$('main').on('submit', '.add-bookmark-form', function (event) {
-event.preventDefault();
-let form = $('.add-bookmark-form')[0];
-let returnJson = serializeJson(form);
+function handleBookMarkSubmission() {
+  $('main').on('submit', '.add-bookmark-form', function (event) {
+    event.preventDefault();
+    // capture values of form submission 
+    let form = $('.add-bookmark-form')[0];
+    let bookmark = serializeJson(form);
 
-})
+    // calling POST API
+    api.addBookMark(bookmark).then(resultJson => {
+      store.addBookMark(resultJson);
+      store.adding = false;
+      render();
+    }) //wait for the server to respond with the object which has the ID
+      .catch(error => {
+        if (error) {
+          // add store error object
+          console.log(error);
+        }
+      });
+  });
 }
 
 function returnToHomePage() {
@@ -93,31 +111,33 @@ function returnToHomePage() {
   });
 }
 
+
+function handleFilterBookmarkRating () {
+$('main').on('change', '#filter-dropdown', function (event) {
+ let rating = $('#filter-dropdown').val();
+ store.filterValue = rating;
+ render();
+});
+}
+
 function goToNewBookmark() {
-  console.log('createNewBookmark');
-  $('main').on('click','.add-bookmark', function(event) {
+  $('main').on('click', '.add-bookmark', function (event) {
     store.adding = true;
     render();
   });
 }
 
-
-function setEventHandlers () {
-    goToNewBookmark();
-    returnToHomePage();
-    handleBookMarkSubmission();
+function setEventHandlers() {
+  goToNewBookmark();
+  returnToHomePage();
+  handleBookMarkSubmission();
+  handleFilterBookmarkRating();
 }
 
 // Listeners To do's
 // filter select change 
 // expand listener 
 // delete button 
-
-// call API, push to store, render the page, HTML templates
-
-
-
-
 
 export default {
   render,

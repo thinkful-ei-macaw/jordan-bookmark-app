@@ -10,15 +10,8 @@ function findID(id) {
 }
 
 function addBookMark(bookmark) {
-  let newBookMark = {
-    id: bookmark.id,
-    title: bookmark.title,
-    rating: bookmark.rating,
-    url: bookmark.url,
-    description: bookmark.desc,
-    expanded: false
-  };
-  this.bookMarksList.push(newBookMark);
+  bookmark.expanded = false;
+  this.bookMarksList.push(bookmark);
 }
 
 function deleteBookMark() {
@@ -40,8 +33,11 @@ export default {
   findID, 
   addBookMark, 
   deleteBookMark, 
-  updateBookmark, 
-  setError,
+  updateBookmark,
+  bookMarksList,
+  initLoad,
+  filterValue,
+  error,
   adding
 };
 
