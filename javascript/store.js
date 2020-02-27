@@ -14,24 +14,15 @@ function addBookMark(bookmark) {
   this.bookMarksList.push(bookmark);
 }
 
-function deleteBookMark() {
-  return this.bookMarksList.filter(currentBookMark => currentBookMark.id !== id);
+function deleteBookMark(id) {
+  let currentBookmark = this.findID(id);
+  let bookmarkIndex = this.bookMarksList.indexOf(currentBookmark);
+  this.bookMarksList.splice(bookmarkIndex, 1);
 }
 
 function updateBookmark (id, newObj) {
   let updatedItem = this.bookMarksList.find(currentBookMark => currentBookMark.id === id);
   Object.assign(updatedItem, newObj);
-
-}
-
-function expandBookmark (bookmarkId) {
-  const toggle = this.bookmark.find(bookmark => bookmark.id === bookmarkID);
-  
-}
-
-function setError (error) {
-  this.error = error;
-
 }
 
 export default {

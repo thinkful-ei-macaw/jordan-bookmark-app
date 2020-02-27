@@ -13,14 +13,5 @@ function main () {
     
 }
 
-
-
-
-
-
-
-
-
-
 //First thing is executed 
 $(main);

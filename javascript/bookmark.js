@@ -1,42 +1,25 @@
 import api from './api.js';
 import store from './store.js';
 
-// Template Generators 
+// Template Generator Functions 
 
-function renderAddBookmark() {
-  return `
-    <header class="head-container">
-        <h1 id="headline">My bookmarks</h1>
-    </header>
-    <form class="add-bookmark-form">
-        <label for="title">Title</label><br>
-        <input type="text" id="title" name="title"><br>
-        <label for="desc">Description</label><br>
-        <textarea id="desc" name="desc"></textarea>
-        <label for ="rating">Rating</label>
-        <input type="number" id="rating" name="rating" min="1" max="5">
-        <label for="url">URL</label><br>
-        <input type="url" id="url" name="url"> 
-        <button class="add-new-bookmark-button">Submit</button> 
-    </form>
-    <button class="return" type="button">Cancel</button>
-    `;
-}
+/**Generates first page on load */
 
 function generateFirstPage() {
   return `
     <header class="head-container">
-             <h1 id="headline">My bookmarks</h1>
+             <h1 id="headline underline underlined-dotted">My bookmarks</h1>
          </header>
          <section class="button-section">
              <button class="add-bookmark">Add new bookmark</button>
+             <label class="filter-rating" aria-label="filter by rating"></label>
                  <select name="ratings" id="filter-dropdown">
-                     <option class="filter-top" name="select0" value="0">Filter by rating</option>
-                     <option name="select1" value="5"> 5</option>
-                     <option name="select2" value="4"> 4 or more</option>
-                     <option name="select3" value="3"> 3 or more</option>
-                     <option name="select4" value="2"> 2 or more</option>
-                     <option name="select5" value="1"> 1 or more</option>
+                     <option ${store.filterValue === 0 ? 'selected' : ''} value="0" class="filter-top" name="select0">Filter by rating:</option>
+                     <option ${store.filterValue === 5 ? 'selected' : ''} value="5"> 5</option>
+                     <option ${store.filterValue === 4 ? 'selected' : ''} value="4"> 4 or more</option>
+                     <option ${store.filterValue === 3 ? 'selected' : ''} value="3"> 3 or more</option>
+                     <option ${store.filterValue === 2 ? 'selected' : ''} value="2"> 2 or more</option>
+                     <option ${store.filterValue === 1 ? 'selected' : ''} value="1"> 1 or more</option>
                  </select>
          </section>
         <section>
@@ -45,14 +28,47 @@ function generateFirstPage() {
         </section> 
 `;
 }
+
+/**Function to open up Add bookmark form */
+
+function renderAddBookmark() {
+  return `
+    <header class="head-container">
+        <h1 id="headline">My bookmarks</h1>
+    </header>
+    <form class="add-bookmark-form">
+        <label for="title">Add bookmark title:</label><br>
+        <input type="text" id="title" name="title" placeholder="Add a bookmark"><br>
+        <label for="rating">Add rating (1-5):</label>
+        <input type="number" id="rating" name="rating" min="1" max="5" placeholder="4">
+        <label for="url">Enter url:</label><br>
+        <input type="url" id="url" name="url" placeholder="www.google.com"> 
+        <label for="desc">Enter description:</label><br>
+        <textarea id="desc" name="desc"></textarea>
+        <button class="add-new-bookmark-button">Submit</button> 
+    </form>
+    <button class="return" type="button">Cancel</button>
+    `;
+}
+
+/** Function to generate bookmarks */
+
 function generatingBookmarks() {
-  let html = '<ul>';
+  let html = '<ul class="bookmark-list-section">';
   for (let i = 0; i < store.bookMarksList.length; i++) {
     let bookmarkResult = store.bookMarksList[i];
     if (bookmarkResult.rating >= store.filterValue) {
       html += `
-  <li>${bookmarkResult.title} ${bookmarkResult.rating}</li>
+  <li data-id="${bookmarkResult.id}"><span class="bmTitle">${bookmarkResult.title}</span><span class="bmRating">${bookmarkResult.rating}</span>
+  </li>
     `;
+      if (bookmarkResult.expanded) {
+        html += `
+      <p class="bookmark-description">${bookmarkResult.desc} <br>
+      <a href="${bookmarkResult.url}" class="bookmark-url-result">Visit website</a></p> 
+      <button data-id="${bookmarkResult.id}"class="delete-bookmark">Delete bookmark</button>
+      `;
+      }
     }
   }
   html += '</ul>';
@@ -60,8 +76,15 @@ function generatingBookmarks() {
 }
 
 
+function generateErrors () {
+  return `
+  <p>${store.error.message}</p>
+  `;
+}
+
 function render() {
   let html = '';
+  if(store.error) html += generateErrors();
 
   if (store.adding === false) {
     html += generateFirstPage();
@@ -96,7 +119,8 @@ function handleBookMarkSubmission() {
       .catch(error => {
         if (error) {
           // add store error object
-          console.log(error);
+          store.error = error;
+          render();
         }
       });
   });
@@ -111,11 +135,11 @@ function returnToHomePage() {
 
 
 function handleFilterBookmarkRating () {
-$('main').on('change', '#filter-dropdown', function (event) {
- let rating = $('#filter-dropdown').val();
- store.filterValue = rating;
- render();
-});
+  $('main').on('change', '#filter-dropdown', function (event) {
+    let rating = $('#filter-dropdown').val();
+    store.filterValue = parseInt(rating);
+    render();
+  });
 }
 
 function goToNewBookmark() {
@@ -125,22 +149,33 @@ function goToNewBookmark() {
   });
 }
 
-function getBookmarkID (bookmark) {
-
-
-}
-
 
 function handleBookmarkExpand (){
-  $('main').on('click', '#add-bookmark-form', event => {
-    // Sets expanded status by the ID 
-    store.
-  })
+  $('main').on('click', 'li', event => {
+    let id = $(event.currentTarget).data('id');
+    let currentBookmark = store.findID(id);
+    currentBookmark.expanded = !currentBookmark.expanded;
+    render();
+  });
 }
 
-function generateBookmarkElement () {
-
+function handleBookmarkDelete () {
+  $('main').on('click', '.delete-bookmark', event => {
+    let id = $(event.currentTarget).data('id');
+    api.deleteBookmarkItems(id)
+      .then(resultJson => {
+        store.deleteBookMark(id);
+        render();
+      }) 
+      .catch(error => {
+        if (error) {
+          store.error = error;
+          render();
+        }
+      });
+  });
 }
+
 
 function setEventHandlers() {
   goToNewBookmark();
@@ -148,12 +183,8 @@ function setEventHandlers() {
   handleBookMarkSubmission();
   handleFilterBookmarkRating();
   handleBookmarkExpand();
+  handleBookmarkDelete();
 }
-
-// Listeners To do's
-// filter select change 
-// expand listener 
-// delete button 
 
 export default {
   render,
