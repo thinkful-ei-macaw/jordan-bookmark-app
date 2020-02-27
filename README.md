@@ -2,7 +2,7 @@
 
 You can see it live [here](https://thinkful-ei-macaw.github.io/jordan-bookmark-app/)
 
-#User Stories
+# User Stories
 
 This application allows a user to add, edit and delete their favorite bookmarks.
 
