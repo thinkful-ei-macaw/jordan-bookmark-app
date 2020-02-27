@@ -45,8 +45,6 @@ function generateFirstPage() {
         </section> 
 `;
 }
-// Loop through array. 
-
 function generatingBookmarks() {
   let html = '<ul>';
   for (let i = 0; i < store.bookMarksList.length; i++) {
@@ -127,11 +125,26 @@ function goToNewBookmark() {
   });
 }
 
+function getBookmarkID (bookmark) {
+
+
+}
+
+
+function handleBookmarkExpand (){
+ $('main').on('click', 
+}
+
+function generateBookmarkElement () {
+
+}
+
 function setEventHandlers() {
   goToNewBookmark();
   returnToHomePage();
   handleBookMarkSubmission();
   handleFilterBookmarkRating();
+  handleBookmarkExpand();
 }
 
 // Listeners To do's
