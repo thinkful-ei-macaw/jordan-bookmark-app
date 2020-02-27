@@ -24,6 +24,11 @@ function updateBookmark (id, newObj) {
 
 }
 
+function expandBookmark (bookmarkId) {
+  const toggle = this.bookmark.find(bookmark => bookmark.id === bookmarkID);
+  
+}
+
 function setError (error) {
   this.error = error;
 

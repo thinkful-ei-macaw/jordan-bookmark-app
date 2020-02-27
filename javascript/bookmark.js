@@ -132,7 +132,10 @@ function getBookmarkID (bookmark) {
 
 
 function handleBookmarkExpand (){
- $('main').on('click', 
+  $('main').on('click', '#add-bookmark-form', event => {
+    // Sets expanded status by the ID 
+    store.
+  })
 }
 
 function generateBookmarkElement () {
